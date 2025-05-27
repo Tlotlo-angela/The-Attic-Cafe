@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart - The Attic Cafe</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="container py-5">
+  <header>
+    <img src="LOGO.png" alt="Logo">
+    <h1>Your Cart</h1>
+  </header>
+    <nav>
+        <div class="container my-3">
+  <a href="index.html">
+  </a>
+</div>
+  <ul class="nav-menu">
+    <li><a href="home.html">Home</a></li>
+
+    <li class="dropdown">
+      <a href="javascript:void(0)">Menu</a>
+      <ul class="dropdown-content">
+        <li><a href="coffee&tea.html">Coffee & Tea</a></li>
+        <li><a href="breakfast.html">Breakfast</a></li>
+        <li><a href="patries&cakes.html">Pastries & Cakes</a></li>
+      </ul>
+    </li>
+
+    <li class="dropdown">
+      <a href="javascript:void(0)">Order Ahead</a>
+      <ul class="dropdown-content">
+        <li><a href="pre-order.html">Pre-Order</a></li>
+      </ul>
+    </li>
+
+    <li class="dropdown">
+      <a href="javascript:void(0)">Reservations</a>
+      <ul class="dropdown-content">
+        <li><a href="bookingform.html">Booking Form</a></li>
+      </ul>
+    </li>
+
+    <li class="dropdown">
+      <a href="javascript:void(0)">Events</a>
+      <ul class="dropdown-content">
+        <li><a href="musicnights.html">Music Nights</a></li>
+        <li><a href="artworkshops.html">Art Workshops</a></li>
+      </ul>
+    </li>
+
+    <li class="dropdown">
+      <a href="javascript:void(0)">Contacts</a>
+      <ul class="dropdown-content">
+        <li><a href="feedbackform.html">Feedback Form</a></li>
+      </ul>
+    </li>
+     <li class="dropdown">
+      <a href="javascript:void(0)">Cart</a>
+      <ul class="dropdown-content">
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+ <div id="cart-items"></div>
+<hr>
+<h2>Checkout Details</h2>
+<form id="checkout-form">
+  <label for="name">Full Name:</label><br>
+  <input type="text" id="name" name="name" required><br><br>
+
+  <label for="surname">Surname:</label><br>
+  <input type="text" id="surname" name="surname" required><br><br>
+
+  <label for="card">Card Number:</label><br>
+  <input type="text" id="card" name="card" required pattern="\d{12,16}" title="Enter 12 to 16 digit card number"><br><br>
+
+  <label for="pickup">Pickup Time:</label><br>
+  <input type="time" id="pickup" name="pickup" required min="06:00" max="22:00"><br><br>
+
+  <button type="submit" class="btn-custom">Place Order</button>
+</form>
+<button onclick="history.back()" class="btn-back">← Back</button>
+<footer>
+  <p>&copy; 2025 The Attic Cafe</p>
+</footer>
+
+<script>
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartItemsDiv = document.getElementById("cart-items");
+
+  if (cart.length === 0) {
+    cartItemsDiv.innerHTML = "<p>Your cart is empty.</p>";
+    document.getElementById("checkout-form").style.display = "none";
+  } else {
+    let total = 0;
+    cartItemsDiv.innerHTML = "<h2>Items in Your Cart:</h2>";
+    cart.forEach(item => {
+      total += item.price;
+      cartItemsDiv.innerHTML += `<div class="cart-item">
+        <strong>${item.name}</strong> - P${item.price.toFixed(2)}
+      </div>`;
+    });
+    cartItemsDiv.innerHTML += `<p><strong>Total: P${total.toFixed(2)}</strong></p>`;
+  }
+
+  document.getElementById("checkout-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const surname = document.getElementById("surname").value.trim();
+    const card = document.getElementById("card").value.trim();
+    const pickup = document.getElementById("pickup").value;
+
+    if (!/^\d{12,16}$/.test(card)) {
+      alert("Please enter a valid 12 to 16-digit card number.");
+      return;
+    }
+
+    alert(`Thank you, ${name} ${surname}! Your order will be ready for pickup at ${pickup}.`);
+    localStorage.removeItem("cart");
+    window.location.href = "home.html";
+  });
+</script>
